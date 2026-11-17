@@ -217,6 +217,13 @@ li.clave{border-color:#F0DFB4;background:linear-gradient(90deg,#FFFCF4 0,#fff 46
 .editor{padding:0 12px 11px;margin:-4px 0 9px}
 .editor input{padding:9px 11px}
 .editor .f1{margin-bottom:8px}
+.editor select{width:100%;font-family:'Cuerpo',system-ui,sans-serif;font-size:.95rem;
+  color:var(--ink);background:#FCFBFE;border:1px solid var(--line2);border-radius:12px;
+  padding:9px 11px;outline:none;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--soft) 50%),
+                   linear-gradient(135deg,var(--soft) 50%,transparent 50%);
+  background-position:calc(100% - 17px) 50%, calc(100% - 12px) 50%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:32px}
 .editor .f2{display:flex;gap:8px}
 .editor .q{flex:0 0 60px;text-align:center}
 .editor .btn{flex:0 0 auto;padding:9px 13px;font-size:.9rem}
@@ -238,6 +245,16 @@ li.clave{border-color:#F0DFB4;background:linear-gradient(90deg,#FFFCF4 0,#fff 46
 .hfila b{font-family:'Serifa',Georgia,serif;font-weight:600;font-size:1rem}
 .hfila.htot{border-top:1px solid var(--line2)}
 .hfila.htot span:first-child,.hfila.htot b{color:var(--soft)}
+
+/* ---------- todas las tiendas juntas ---------- */
+.bloque-tienda{border:1px solid var(--line);border-radius:14px;margin:18px 0 2px;
+  box-shadow:var(--sh-s);overflow:hidden}
+.bloque-tienda:first-child{margin-top:4px}
+.cab-tienda{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  padding:11px 14px;cursor:pointer;color:#2C2740}
+.cab-tienda span:first-child{font-family:'Serifa',Georgia,serif;font-weight:600;font-size:1.05rem;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cuenta-mini{font-size:.8rem;color:#554E6B;white-space:nowrap}
 
 /* ---------- barra inferior ---------- */
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:20;
@@ -308,6 +325,10 @@ body.con-recibo .bar,body.con-recibo .mini-presu{display:none !important}
 .tk-codigo{text-align:center;font-size:.8rem;letter-spacing:.3em}
 .recibo-botones{max-width:420px;margin:26px auto 0;display:flex;gap:9px}
 .recibo-botones .btn{flex:1}
+
+/* ---------- hueco para el distintivo del alojamiento ---------- */
+body.con-badge{padding-bottom:190px}
+body.con-badge .bar{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 
 /* ---------- modo oscuro ---------- */
 :root[data-modo="oscuro"]{
@@ -434,48 +455,51 @@ mascota:'<path d="M16 27c-4.4 0-7.6-2.8-7.6-6.2 0-3.4 3.2-5.8 7.6-5.8s7.6 2.4 7.
 
 belleza:'<rect x="11" y="12.5" width="10" height="15.5" rx="3" fill="#F7DCE8" stroke="#C9839F" stroke-width="1.4"/><rect x="13.2" y="8" width="5.6" height="4.5" rx="1.2" fill="#EFBBD2" stroke="#C9839F" stroke-width="1.3"/><rect x="12.2" y="4.4" width="7.6" height="3.8" rx="1.5" fill="#C9839F"/><path d="M13.6 17.5h4.8M13.6 20.5h3" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><path d="M24.5 9.5c1.2 1.6 1.8 2.7 1.8 3.6a1.8 1.8 0 1 1-3.6 0c0-.9.6-2 1.8-3.6z" fill="#EFBBD2" stroke="#C9839F" stroke-width="1.2"/>',
 
+oficina:'<path d="M21.5 6.5 25 10l-9.5 9.5-4.5 1 1-4.5z" fill="#FFD98A" stroke="#C9972B" stroke-width="1.3" stroke-linejoin="round"/><path d="M20.2 7.8 23.7 11.3" stroke="#C9972B" stroke-width="1.2"/><path d="M11 20.5 12 16" stroke="#C9972B" stroke-width="1.2"/><rect x="5" y="4" width="11" height="15" rx="1.6" fill="#DCE9F7" stroke="#7FA3C4" stroke-width="1.4"/><path d="M8 8h5M8 11h5M8 14h3" stroke="#7FA3C4" stroke-width="1.3" stroke-linecap="round"/>',
+
 bolsa:'<path d="M10 12h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V14a2 2 0 0 1 2-2z" fill="#DCE8F5" stroke="#8FA8BF" stroke-width="1.5"/><path d="M12.5 12V9.5a3.5 3.5 0 0 1 7 0V12" fill="none" stroke="#8FA8BF" stroke-width="1.6"/><path d="M11.5 16.5v9" stroke="#F5FAFF" stroke-width="2" stroke-linecap="round"/>'
 };
 
 /* palabras clave -> icono  (sin tildes, en minusculas) */
 const CLAVES = [
- [/\b(pasta dental|dental|cepillo|enjuague|colgate|hilo dental)/,'pasta'],
+ [/\b(resaltador|esfero|boligrafo|lapiz|lapices|borrador|cuaderno|libreta|regla|grapadora|grapas|clips|carpeta|folder|archivador|tijeras|goma|pegamento|silicona|marcador|plumon|corrector|papel bond|resma|hojas|post.?it|cinta adhesiva|masking|calculadora|mochila|cartuchera|tempera|acuarela|cartulina|pincel)(es|s)?\b/,'oficina'],
+ [/\b(pasta dental|dental|cepillo|enjuague|colgate|hilo dental)(es|s)?\b/,'pasta'],
  [/\b(pelo|cabello|capilar|peinar|anticaspa|mascarilla|serum|maquillaje|labial|rimel|rubor|base|corrector|sombras?|delineador|esmalte|uñas|unas|tinte|depilar|afeitar|rasurar|cera|perfume|colonia|micelar|facial|corporal|exfoliante|t[oó]nico|protector solar|bloqueador|pestañas|cejas|algod[oó]n|hisopos?)\b/,'belleza'],
  [/\b(shampoo|champu|champ[uú]|acondicionador)\b/,'belleza'],
- [/\b(fresas?|frutillas?)/,'fresa'],[/\bmanzanas?/,'manzana'],
- [/\b(banano|guineo|platano|maduro)/,'banano'],
- [/\b(naranja|mandarina|limon|lima|toronja)/,'naranja'],[/\b(uvas?|pasas)/,'uva'],
- [/\b(sandia|melon|patilla|papaya|pina|mango|mora|durazno|kiwi|pera)/,'sandia'],
- [/\b(chifles?|papas fritas|snack|doritos|platanitos)/,'galleta'],
- [/\btomates?/,'tomate'],[/\b(papas?|yuca|camote|melloco|zapallo)/,'papa'],
- [/\b(zanahoria|remolacha|nabo)/,'zanahoria'],
- [/\b(lechuga|col|coliflor|brocoli|acelga|espinaca|repollo|verduras?|hierbitas|cilantro|perejil|apio|vainita|pepino|pimiento)/,'lechuga'],
- [/\b(aguacate|palta)/,'aguacate'],[/\b(cebollas?|ajo|paitena|paiteña)/,'cebolla'],
- [/\b(maiz|choclo|canguil|mote)/,'maiz'],
- [/\b(leche|crema de leche)/,'leche'],[/\b(queso|mozzarella)/,'queso'],
- [/\bhuevos?/,'huevo'],[/\b(yogur|yoghurt|yogurt)/,'yogur'],
- [/\b(pan|panes|bollo|tostadas?|pan de yuca|empanada)/,'pan'],
- [/\b(arroz|quinua|lentejas?|frejol|frijol|poroto|garbanzo|harina|avena|morocho)/,'arroz'],
- [/\b(fideos?|tallarin|pasta|spaghetti|espagueti|macarron)/,'fideos'],
- [/\b(aceite|vinagre|mayonesa|salsa|ketchup|mostaza|manteca)/,'aceite'],
- [/\b(azucar|panela|miel|mermelada)/,'azucar'],
- [/\b(sal|comino|pimienta|condimento|achiote|aliño|alino|orégano|oregano)/,'sal'],
- [/\b(cafe|te|chocolate en polvo|milo|nescafe|aromatica)/,'cafe'],
- [/\b(pollo|pavo|gallina|presas)/,'pollo'],
- [/\b(carne|res|cerdo|chuleta|chorizo|salchicha|jamon|mortadela|costilla|molida)/,'carne'],
- [/\b(pescado|tilapia|corvina|camaron|camarones|mariscos?|concha)/,'pescado'],
- [/\b(atun|sardina|enlatados?|conserva|lata|latas)/,'atun'],
- [/\bagua/,'agua'],[/\b(gaseosa|cola|cerveza|sprite|fanta|refresco|soda|coca)/,'gaseosa'],
- [/\b(jugo|nectar|zumo|batido)/,'jugo'],
- [/\b(galletas?|cereal|canguil dulce|tostitos)/,'galleta'],
- [/\b(chocolate|dulce|caramelo|golosina|chupete)/,'chocolate'],
- [/\b(helado|hielo|paleta)/,'helado'],
- [/\b(papel|servilletas?|higienico|toalla|pañuelos|kleenex)/,'papel'],
- [/\b(detergente|cloro|desinfectante|lavavajillas?|suavizante|limpiavidrios|deja|ajax|fabuloso|lava)/,'detergente'],
- [/\b(jabon|esponja|estropajo)/,'jabon'],
- [/\b(shampoo|champu|acondicionador|crema|desodorante|gel|toallas higienicas|pañales|panales)/,'shampoo'],
- [/\b(escoba|trapeador|recogedor|fundas?|basura|guantes)/,'escoba'],
- [/\b(perro|gato|mascota|balanceado|michi|arena sanitaria)/,'mascota']
+ [/\b(fresas?|frutillas?)(es|s)?\b/,'fresa'],[/\b(manzanas?)(es|s)?\b/,'manzana'],
+ [/\b(banano|guineo|platano|maduro)(es|s)?\b/,'banano'],
+ [/\b(naranja|mandarina|limon|lima|toronja)(es|s)?\b/,'naranja'],[/\b(uvas?|pasas)(es|s)?\b/,'uva'],
+ [/\b(sandia|melon|patilla|papaya|pina|mango|mora|durazno|kiwi|pera)(es|s)?\b/,'sandia'],
+ [/\b(chifles?|papas fritas|snack|doritos|platanitos)(es|s)?\b/,'galleta'],
+ [/\b(tomates?)(es|s)?\b/,'tomate'],[/\b(papas?|yuca|camote|melloco|zapallo)(es|s)?\b/,'papa'],
+ [/\b(zanahoria|remolacha|nabo)(es|s)?\b/,'zanahoria'],
+ [/\b(lechuga|col|coliflor|brocoli|acelga|espinaca|repollo|verduras?|hierbitas|cilantro|perejil|apio|vainita|pepino|pimiento)(es|s)?\b/,'lechuga'],
+ [/\b(aguacate|palta)(es|s)?\b/,'aguacate'],[/\b(cebollas?|ajo|paitena|paiteña)(es|s)?\b/,'cebolla'],
+ [/\b(maiz|choclo|canguil|mote)(es|s)?\b/,'maiz'],
+ [/\b(leche|crema de leche)(es|s)?\b/,'leche'],[/\b(queso|mozzarella)(es|s)?\b/,'queso'],
+ [/\b(huevos?)(es|s)?\b/,'huevo'],[/\b(yogur|yoghurt|yogurt)(es|s)?\b/,'yogur'],
+ [/\b(pan|panes|bollo|tostadas?|pan de yuca|empanada)(es|s)?\b/,'pan'],
+ [/\b(arroz|quinua|lentejas?|frejol|frijol|poroto|garbanzo|harina|avena|morocho)(es|s)?\b/,'arroz'],
+ [/\b(fideos?|tallarin|pasta|spaghetti|espagueti|macarron)(es|s)?\b/,'fideos'],
+ [/\b(aceite|vinagre|mayonesa|salsa|ketchup|mostaza|manteca)(es|s)?\b/,'aceite'],
+ [/\b(azucar|panela|miel|mermelada)(es|s)?\b/,'azucar'],
+ [/\b(sal|comino|pimienta|condimento|achiote|aliño|alino|orégano|oregano)(es|s)?\b/,'sal'],
+ [/\b(cafe|te|chocolate en polvo|milo|nescafe|aromatica)(es|s)?\b/,'cafe'],
+ [/\b(pollo|pavo|gallina|presas)(es|s)?\b/,'pollo'],
+ [/\b(carne|res|cerdo|chuleta|chorizo|salchicha|jamon|mortadela|costilla|molida)(es|s)?\b/,'carne'],
+ [/\b(pescado|tilapia|corvina|camaron|camarones|mariscos?|concha)(es|s)?\b/,'pescado'],
+ [/\b(atun|sardina|enlatados?|conserva|lata|latas)(es|s)?\b/,'atun'],
+ [/\b(agua)(es|s)?\b/,'agua'],[/\b(gaseosa|cola|cerveza|sprite|fanta|refresco|soda|coca)(es|s)?\b/,'gaseosa'],
+ [/\b(jugo|nectar|zumo|batido)(es|s)?\b/,'jugo'],
+ [/\b(galletas?|cereal|canguil dulce|tostitos)(es|s)?\b/,'galleta'],
+ [/\b(chocolate|dulce|caramelo|golosina|chupete)(es|s)?\b/,'chocolate'],
+ [/\b(helado|hielo|paleta)(es|s)?\b/,'helado'],
+ [/\b(papel|servilletas?|higienico|toalla|pañuelos|kleenex)(es|s)?\b/,'papel'],
+ [/\b(detergente|cloro|desinfectante|lavavajillas?|suavizante|limpiavidrios|deja|ajax|fabuloso|lava)(es|s)?\b/,'detergente'],
+ [/\b(jabon|esponja|estropajo)(es|s)?\b/,'jabon'],
+ [/\b(shampoo|champu|acondicionador|crema|desodorante|gel|toallas higienicas|pañales|panales)(es|s)?\b/,'shampoo'],
+ [/\b(escoba|trapeador|recogedor|fundas?|basura|guantes)(es|s)?\b/,'escoba'],
+ [/\b(perro|gato|mascota|balanceado|michi|arena sanitaria)(es|s)?\b/,'mascota']
 ];
 
 /* colores de fondo de la bolsita por tipo de icono */
@@ -487,7 +511,7 @@ const TONO = {fresa:'#FFE0E6',manzana:'#FFE0E0',banano:'#FFF6D4',naranja:'#FFEBD
  carne:'#FFE2E4',pescado:'#E0F2FA',atun:'#EDF1F5',agua:'#E0F2FD',gaseosa:'#FFE4EE',
  jugo:'#FFF0D9',galleta:'#F5E7D4',chocolate:'#EDE0D4',helado:'#FFEFF5',papel:'#F5F3FA',
  detergente:'#E0F4FA',jabon:'#FFE8F1',shampoo:'#EEE6FC',pasta:'#E4F2FD',escoba:'#FFF6D4',
- mascota:'#F4E7D6',belleza:'#FBE8F1',bolsa:'#EDF1F6'};
+ mascota:'#F4E7D6',belleza:'#FBE8F1',oficina:'#E6EFF8',bolsa:'#EDF1F6'};
 
 function quitarTildes(s){
   return s.toLowerCase()
@@ -500,8 +524,8 @@ function iconoDe(nombre){
   return 'bolsa';
 }
 /* devuelve el HTML de la bolsita con el producto dentro */
-function bolsita(nombre, tam){
-  const k = iconoDe(nombre);
+function bolsita(nombre, tam, forzado){
+  const k = forzado || iconoDe(nombre);
   const t = TONO[k] || '#EDF1F6';
   return '<span class="bolsita" style="--tono:' + t + ';width:' + tam + 'px;height:' + tam + 'px">'
     + '<svg viewBox="0 0 32 32" aria-hidden="true">' + I[k] + '</svg>'
@@ -525,10 +549,20 @@ const CAT_DE = {
   galleta:'Snacks y dulces',chocolate:'Snacks y dulces',helado:'Snacks y dulces',
   papel:'Limpieza y hogar',detergente:'Limpieza y hogar',escoba:'Limpieza y hogar',
   jabon:'Cuidado personal',shampoo:'Belleza',pasta:'Cuidado personal',belleza:'Belleza',
-  mascota:'Mascotas',bolsa:'Otros'
+  oficina:'Papelería',mascota:'Mascotas',bolsa:'Otros'
 };
 const ORDEN = ['Frutas y verduras','Carnes y pescado','Lácteos y huevos','Panadería','Despensa',
-  'Bebidas','Snacks y dulces','Limpieza y hogar','Cuidado personal','Belleza','Mascotas','Otros'];
+  'Bebidas','Snacks y dulces','Limpieza y hogar','Cuidado personal','Belleza',
+  'Papelería','Mascotas','Otros'];
+
+const ICO_CAT = {'Frutas y verduras':'lechuga','Carnes y pescado':'carne',
+  'Lácteos y huevos':'leche','Panadería':'pan','Despensa':'arroz','Bebidas':'agua',
+  'Snacks y dulces':'galleta','Limpieza y hogar':'detergente','Cuidado personal':'jabon',
+  'Belleza':'belleza','Papelería':'oficina','Mascotas':'mascota','Otros':'bolsa'};
+
+/* la categoría que el usuario eligió a mano manda sobre la detectada */
+function catDe(i){ return i.cat || CAT_DE[iconoDe(i.nombre)] || 'Otros'; }
+function icoDe(i){ return i.cat ? (ICO_CAT[i.cat] || 'bolsa') : iconoDe(i.nombre); }
 
 const PALETA = ['#FCE7F0','#E0F3EA','#EDE7FD','#FDEEDF','#E4EFFC','#FBF3DA'];
 
@@ -554,6 +588,16 @@ function temaActual(){
 function aplicarTema(){
   document.documentElement.setAttribute('data-modo', temaActual());
 }
+const ICO_LISTA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+ + 'stroke-width="1.7" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/>'
+ + '<circle cx="4.5" cy="6" r="1.2" fill="currentColor" stroke="none"/>'
+ + '<circle cx="4.5" cy="12" r="1.2" fill="currentColor" stroke="none"/>'
+ + '<circle cx="4.5" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg>';
+const ICO_TARJETAS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+ + 'stroke-width="1.7"><rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2"/>'
+ + '<rect x="13" y="3.5" width="7.5" height="7.5" rx="2"/>'
+ + '<rect x="3.5" y="13" width="7.5" height="7.5" rx="2"/>'
+ + '<rect x="13" y="13" width="7.5" height="7.5" rx="2"/></svg>';
 const SOL_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '
  + 'stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2'
  + 'M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg>';
@@ -664,10 +708,23 @@ function cuentas(t){
 /* ================== pantalla: inicio ================== */
 function verInicio(){
   const app = document.getElementById('app');
+  const juntas = db.vistaJunta === true;
   let h = '<header><div class="txt"><h1>Mis tiendas</h1>'
-    + '<p class="sub">Una lista para cada lugar donde compras</p></div>'
+    + '<p class="sub">' + (juntas ? 'Todo lo que falta, tienda por tienda'
+        : 'Una lista para cada lugar donde compras') + '</p></div>'
+    + '<button class="btn btn-round" data-vista-junta="1" aria-label="Cambiar vista">'
+    + (juntas ? ICO_TARJETAS : ICO_LISTA) + '</button>'
     + '<button class="btn btn-round" data-tema="1" aria-label="Cambiar entre claro y oscuro">'
     + (temaActual() === 'oscuro' ? SOL_SVG : LUNA_SVG) + '</button></header>';
+
+  if(juntas){
+    app.innerHTML = h + listaJunta();
+    const bar = document.getElementById('bar');
+    bar.innerHTML = ''; bar.style.display = 'none';
+    const mini = document.getElementById('mini');
+    mini.dataset.activo = ''; mini.classList.remove('on');
+    return;
+  }
 
   h += '<div class="tiendas">';
   db.tiendas.forEach(t => {
@@ -701,6 +758,53 @@ function verInicio(){
   document.getElementById('bar').style.display = 'none';
   const mini = document.getElementById('mini');
   mini.dataset.activo = ''; mini.classList.remove('on');
+}
+
+/* todas las tiendas en una sola lista, con lo que falta de cada una */
+function listaJunta(){
+  const conPendientes = db.tiendas.filter(t => t.items.some(i => !i.hecho));
+  if(!conPendientes.length){
+    return '<div class="vacio"><span class="em">✓</span>'
+      + (db.tiendas.some(t => t.items.length)
+          ? 'No te falta nada por comprar.' : 'Todavía no has anotado nada.')
+      + '<br>Toca el botón de arriba para volver a tus tiendas.</div>';
+  }
+  let h = '';
+  conPendientes.forEach(t => {
+    const pend = t.items.filter(i => !i.hecho);
+    const total = pend.reduce((s,i) => s + i.precio * (numero(i.cant)||1), 0);
+
+    h += '<div class="bloque-tienda" style="background:' + t.color + '">'
+      + '<div class="cab-tienda" data-abrir="' + t.id + '">'
+      + '<span>' + esc(t.nombre) + '</span>'
+      + '<span class="cuenta-mini">' + pend.length
+      + (total ? ' · ' + dinero(total) : '') + '</span></div></div>';
+
+    const grupos = {};
+    const claves = pend.filter(i => i.clave);
+    const resto = pend.filter(i => !i.clave);
+    resto.forEach(i => { const c = catDe(i); (grupos[c] = grupos[c] || []).push(i); });
+
+    const pinta = (titulo, lista, esClave) => {
+      h += '<div class="cat' + (esClave ? ' clave-cat' : '') + '">' + titulo + '</div><ul>';
+      lista.forEach(i => {
+        const bits = [];
+        if(i.cant) bits.push('x' + i.cant);
+        if(i.precio) bits.push(dinero(i.precio) + ' c/u');
+        h += '<li class="' + (i.clave ? 'clave' : '') + '">'
+          + bolsita(i.nombre, 36, icoDe(i))
+          + '<div class="cuerpo"><div class="nom">' + esc(i.nombre) + '</div>'
+          + (bits.length ? '<div class="meta">' + bits.join(' · ') + '</div>' : '') + '</div>'
+          + '<button class="check" data-check="' + i.id + '" data-tienda="' + t.id
+          + '" aria-label="Ya lo tengo">' + CHECK_SVG + '</button></li>';
+      });
+      h += '</ul>';
+    };
+    if(claves.length) pinta('Primero lo importante', claves, true);
+    ORDEN.filter(c => grupos[c]).forEach(c => pinta(c, grupos[c], false));
+  });
+  h += '<p class="pie">Toca el nombre de una tienda para abrirla.</p>';
+  return h;
 }
 
 /* ================== pantalla: una tienda ================== */
@@ -794,9 +898,7 @@ function verTienda(){
     }
     const grupos = {};
     t.items.filter(i => !i.clave).forEach(i => {
-      const cat = CAT_DE[iconoDe(i.nombre)] || 'Otros';
-      (grupos[cat] = grupos[cat] || []).push(i);
-    });
+      const c = catDe(i); (grupos[c] = grupos[c] || []).push(i); });
     ORDEN.filter(cat => grupos[cat]).forEach(cat => {
       h += '<div class="cat">' + cat + '</div><ul>';
       grupos[cat].slice().sort((a,b) => a.hecho - b.hecho).forEach(i => { h += fila(i); });
@@ -867,7 +969,7 @@ function fila(i){
   const barato = masBarato(i.nombre, vista.tiendaId, i.precio);
 
   let h = '<li class="' + (i.hecho ? 'done' : '') + (i.clave ? ' clave' : '') + '">'
-    + bolsita(i.nombre, 42)
+    + bolsita(i.nombre, 42, icoDe(i))
     + '<div class="cuerpo" data-editar="' + i.id + '">'
     + '<div class="nom">' + esc(i.nombre) + '</div>'
     + '<div class="meta">' + bits.join(' · ') + '</div>'
@@ -882,6 +984,11 @@ function fila(i){
     h += '<div class="editor">'
       + '<div class="f1"><input id="e-nombre" value="' + esc(i.nombre) + '" '
       + 'aria-label="Nombre del producto" autocomplete="off"></div>'
+      + '<div class="f1"><select id="e-cat" aria-label="Categoría">'
+      + '<option value="">Categoría automática (' + catDe({nombre:i.nombre}) + ')</option>'
+      + ORDEN.map(c => '<option value="' + c + '"' + (i.cat === c ? ' selected' : '') + '>'
+          + c + '</option>').join('')
+      + '</select></div>'
       + '<div class="f2">'
       + '<input class="q" id="e-cant" inputmode="decimal" value="' + esc(i.cant || '') + '" placeholder="1" aria-label="Cantidad">'
       + '<input id="e-precio" inputmode="decimal" value="' + (i.precio || '') + '" placeholder="$ c/u" aria-label="Precio">'
@@ -1112,6 +1219,7 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-abrir],[data-nueva],[data-volver],[data-ajustes],[data-check],[data-tema],'
     + '[data-quitar],[data-editar],[data-guardar],[data-presu],[data-copiar],[data-limpiar],[data-clave],'
     + '[data-terminar],[data-mover],[data-rapido],[data-recibo],[data-cerrar-recibo],[data-copiar-recibo],'
+    + '[data-vista-junta],'
     + '[data-exportar],[data-importar],[data-confirmar-copia],[data-copiar-copia],'
     + '[data-color],[data-crear],[data-cerrar],[data-editar-tienda],[data-borrar-tienda],[data-duplicar]');
   if(!b) return;
@@ -1146,6 +1254,8 @@ document.addEventListener('click', e => {
     copiarTexto(txt).then(ok => { if(!ok) mostrarTexto(txt); else b.textContent = '¡Copiado!'; });
     return;
   }
+  if(d.vistaJunta){ db.vistaJunta = !db.vistaJunta; guardar();
+    window.scrollTo(0,0); return pintar(); }
   if(d.tema){ db.tema = temaActual() === 'oscuro' ? 'claro' : 'oscuro';
     aplicarTema(); guardar(); return pintar(); }
   if(d.ajustes) return hojaAjustes();
@@ -1171,8 +1281,12 @@ document.addEventListener('click', e => {
     return;
   }
 
-  if(d.check){ const i = t.items.find(x => x.id === d.check); i.hecho = !i.hecho;
-    guardar(); return pintar(); }
+  if(d.check){
+    const dueña = d.tienda ? db.tiendas.find(x => x.id === d.tienda) : t;
+    const i = dueña && dueña.items.find(x => x.id === d.check);
+    if(i){ i.hecho = !i.hecho; guardar(); }
+    return pintar();
+  }
   if(d.quitar){ t.items = t.items.filter(x => x.id !== d.quitar);
     vista.editId = null; guardar(); return pintar(); }
   if(d.clave){ const i = t.items.find(x => x.id === d.clave); i.clave = !i.clave;
@@ -1188,6 +1302,8 @@ document.addEventListener('click', e => {
     const i = t.items.find(x => x.id === d.guardar);
     const nn = document.getElementById('e-nombre').value.trim();
     if(nn) i.nombre = nn;
+    const ec = document.getElementById('e-cat');
+    if(ec) i.cat = ec.value || '';
     i.cant = document.getElementById('e-cant').value.trim();
     i.precio = numero(document.getElementById('e-precio').value);
     recordar(i.nombre, i.precio, t.id);
@@ -1340,8 +1456,7 @@ async function copiar(btn, t){
   if(!t.items.length) return;
   let txt = t.nombre.toUpperCase() + '\n';
   const grupos = {};
-  t.items.forEach(i => { const c = CAT_DE[iconoDe(i.nombre)] || 'Otros';
-    (grupos[c] = grupos[c] || []).push(i); });
+  t.items.forEach(i => { const c = catDe(i); (grupos[c] = grupos[c] || []).push(i); });
   ORDEN.filter(c => grupos[c]).forEach(c => {
     txt += '\n' + c + '\n';
     grupos[c].forEach(i => {
@@ -1363,6 +1478,21 @@ try{
     });
   }
 }catch(e){}
+
+/* algunos alojamientos ponen un distintivo fijo abajo a la derecha:
+   si aparece, subimos la barra para que no tape los botones */
+(function(){
+  const mirar = () => {
+    const hay = !!document.querySelector(
+      '#nl-badge-frame, [id*="nl-badge"], iframe[src*="netlify"][src*="badge"]');
+    document.body.classList.toggle('con-badge', hay);
+  };
+  mirar();
+  try{ new MutationObserver(mirar).observe(document.documentElement,
+    {childList:true, subtree:true}); }catch(e){}
+  setTimeout(mirar, 1200);
+  setTimeout(mirar, 4000);
+})();
 
 cargar();
 aplicarTema();

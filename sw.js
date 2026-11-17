@@ -1,5 +1,5 @@
 /* Service worker: guarda la app para que abra sin internet */
-const CACHE = 'mi-lista-v1';
+const CACHE = 'mi-lista-v2';
 const ARCHIVOS = [
   './',
   './index.html',
@@ -31,9 +31,15 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if(req.method !== 'GET') return;
 
+  /* la página se pide primero a internet, para que las mejoras lleguen solas;
+     si no hay conexión, se usa la copia guardada */
   if(req.mode === 'navigate'){
     e.respondWith(
-      caches.match('./index.html').then(r => r || fetch(req).catch(() => caches.match('./')))
+      fetch(req).then(res => {
+        const copia = res.clone();
+        caches.open(CACHE).then(c => c.put('./index.html', copia)).catch(() => {});
+        return res;
+      }).catch(() => caches.match('./index.html').then(r => r || caches.match('./')))
     );
     return;
   }
